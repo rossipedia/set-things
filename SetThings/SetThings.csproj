@@ -43,7 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultAttribute.cs" />
+    <Compile Include="ISettingsStore.cs" />
+    <Compile Include="RedisSettingsManager.cs" />
+    <Compile Include="RedisSettingsStore.cs" />
     <Compile Include="ReflectionExtensions.cs" />
+    <Compile Include="SettingAttribute.cs" />
+    <Compile Include="SettingsAttribute.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
