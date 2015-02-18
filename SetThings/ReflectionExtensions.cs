@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -106,18 +107,20 @@ namespace SetThings
         private static void GetRawValue<T>(Dictionary<string, string> rawSettings, string key, string defaultValue, ref T target)
         {
             string val;
+            var converter = TypeDescriptor.GetConverter(typeof(T));
             if (rawSettings.TryGetValue(key, out val))
             {
-                target = (T)Convert.ChangeType(val, typeof(T));
+                target = (T)converter.ConvertFromInvariantString(val);
             }
             else if (defaultValue != null)
             {
-                target = (T)Convert.ChangeType(defaultValue, typeof(T));
+                target = (T)converter.ConvertFromInvariantString(val);
             }
         }
 
         private static readonly MethodInfo s_setRawValueMethod = typeof(ReflectionExtensions).GetMethod("SetRawValue", BindingFlags.Static | BindingFlags.NonPublic);
         // ReSharper disable once UnusedMember.Local
+        // ReSharper disable once UnusedParameter.Local
         private static void SetRawValue<T>(Dictionary<string, string> rawSettings, string key, string defaultValue, T value)
         {
             rawSettings.Add(key, Convert.ToString(value));
