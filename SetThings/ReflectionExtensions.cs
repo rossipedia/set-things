@@ -114,7 +114,7 @@ namespace SetThings
             }
             else if (defaultValue != null)
             {
-                target = (T)converter.ConvertFromInvariantString(val);
+                target = (T)converter.ConvertFromInvariantString(defaultValue);
             }
         }
 
