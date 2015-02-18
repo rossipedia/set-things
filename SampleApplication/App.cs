@@ -7,7 +7,7 @@ namespace SampleApplication
 {
     public static class App
     {
-        static void Main()
+        private static void Main()
         {
             var multiplexer = ConnectionMultiplexer.Connect("localhost");
             var manager = new RedisSettingsManager<Settings>(multiplexer, 5, "settings");
@@ -27,12 +27,12 @@ namespace SampleApplication
             };
 
             manager.BeginUpdate()
-                .Set(s => s.Analytics.LegacyEnabled, true)
-                .Set(s => s.Analytics.NewEnabled, true)
-                .Set(s => s.Network.CareersHost, "local.careers.stackoverflow.com")
-                .Set(s => s.Network.CalculonHost, "local.clc.stackoverflow.com")
-                .Set(s => s.Network.JoelCareersHost, "local.joeltest.com")
-                .Commit();
+                   .Set(s => s.Analytics.LegacyEnabled, true)
+                   .Set(s => s.Analytics.NewEnabled, true)
+                   .Set(s => s.Network.CareersHost, "local.careers.stackoverflow.com")
+                   .Set(s => s.Network.CalculonHost, "local.clc.stackoverflow.com")
+                   .Set(s => s.Network.JoelCareersHost, "local.joeltest.com")
+                   .Commit();
 
             e.WaitOne();
         }

@@ -7,7 +7,8 @@ namespace SampleApplication
     public class Settings
     {
         public AnalyticsSettings Analytics { get; private set; }
-        
+        public NetworkSettings Network { get; private set; }
+
         [Settings]
         public class AnalyticsSettings
         {
@@ -15,14 +16,12 @@ namespace SampleApplication
             public bool LegacyEnabled { get; private set; }
         }
 
-        
-        public NetworkSettings Network { get; private set; }
-        
         [Settings]
         public class NetworkSettings
         {
-            [Default(Value="careers.stackoverflow.com")]
+            [Default(Value = "careers.stackoverflow.com")]
             public string CareersHost { get; private set; }
+
             public string CalculonHost { get; private set; }
             public string JoelCareersHost { get; private set; }
         }

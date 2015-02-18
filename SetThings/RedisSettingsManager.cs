@@ -4,13 +4,14 @@ using StackExchange.Redis;
 
 namespace SetThings
 {
-    public class RedisSettingsManager<TSettings> : SettingsManager<TSettings> where TSettings : class, new()
+    public class RedisSettingsManager<TSettings>
+        : SettingsManager<TSettings> where TSettings : class, new()
     {
-        private readonly ConnectionMultiplexer _redis;
         private readonly int _databaseNum;
-        public event EventHandler SettingsUpdated;
+        private readonly ConnectionMultiplexer _redis;
 
-        public RedisSettingsManager(ConnectionMultiplexer redis, int databaseNum, string hashName) 
+
+        public RedisSettingsManager(ConnectionMultiplexer redis, int databaseNum, string hashName)
             : base(new RedisSettingsStore(redis, databaseNum, hashName))
         {
             _redis = redis;
@@ -19,21 +20,30 @@ namespace SetThings
             subscriber.Subscribe(Channel, OnSettingsUpdatedMessage);
         }
 
+
         internal static string Channel
         {
-            get { return string.Format("SETTINGS-{0}-UPDATED", typeof(TSettings).FullName); }
+            get { return string.Format("SETTINGS-{0}-UPDATED", typeof (TSettings).FullName); }
         }
+
+        public event EventHandler SettingsUpdated;
+
 
         private void OnSettingsUpdatedMessage(RedisChannel channel, RedisValue message)
         {
             OnSettingsUpdated();
         }
 
+
         protected virtual void OnSettingsUpdated()
         {
             var handler = SettingsUpdated;
-            if (handler != null) handler(this, EventArgs.Empty);
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
         }
+
 
         internal override void WriteSettings(Dictionary<string, string> settings, bool merge = false)
         {
