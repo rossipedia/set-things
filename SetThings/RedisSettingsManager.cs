@@ -21,28 +21,10 @@ namespace SetThings
         }
 
 
-        internal static string Channel
-        {
-            get { return string.Format("SETTINGS-{0}-UPDATED", typeof (TSettings).FullName); }
-        }
-
+        internal static string Channel => string.Format("SETTINGS-{0}-UPDATED", typeof (TSettings).FullName);
         public event EventHandler SettingsUpdated;
-
-
-        private void OnSettingsUpdatedMessage(RedisChannel channel, RedisValue message)
-        {
-            OnSettingsUpdated();
-        }
-
-
-        protected virtual void OnSettingsUpdated()
-        {
-            var handler = SettingsUpdated;
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
-        }
+        private void OnSettingsUpdatedMessage(RedisChannel channel, RedisValue message) => OnSettingsUpdated();
+        protected virtual void OnSettingsUpdated() => SettingsUpdated?.Invoke(this, EventArgs.Empty);
 
 
         internal override void WriteSettings(Dictionary<string, string> settings, bool merge = false)

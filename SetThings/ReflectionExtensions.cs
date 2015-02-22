@@ -219,11 +219,8 @@ namespace SetThings
         }
 
 
-        internal static string GetDefaultValue(this PropertyInfo prop)
-        {
-            var attr = prop.GetCustomAttribute<DefaultAttribute>();
-            return attr != null ? attr.Value : null;
-        }
+        internal static string GetDefaultValue(this PropertyInfo prop) => 
+            prop.GetCustomAttribute<DefaultAttribute>()?.Value;
 
 
         internal static string GetSettingsKey(this PropertyInfo prop, string prefix)

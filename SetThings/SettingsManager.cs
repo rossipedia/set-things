@@ -26,31 +26,12 @@ namespace SetThings
         }
 
 
-        public TSettings Load()
-        {
-            var raw = _store.ReadSettings();
-            return s_loadFromRaw(raw);
-        }
+        public TSettings Load() => s_loadFromRaw(_store.ReadSettings());
+        public async Task<TSettings> LoadAsync() => s_loadFromRaw(await _store.ReadSettingsAsync());
 
+        public virtual IUpdateSettings BeginUpdate() => new Updater(this);
 
-        public async Task<TSettings> LoadAsync()
-        {
-            var raw = await _store.ReadSettingsAsync();
-            return s_loadFromRaw(raw);
-        }
-
-
-        public virtual IUpdateSettings BeginUpdate()
-        {
-            return new Updater(this);
-        }
-
-
-        internal virtual void WriteSettings(Dictionary<string, string> settings, bool merge = false)
-        {
-            _store.WriteSettings(settings, merge);
-        }
-
+        internal virtual void WriteSettings(Dictionary<string, string> settings, bool merge = false) => _store.WriteSettings(settings, merge);
 
         public interface IUpdateSettings
         {
@@ -71,7 +52,6 @@ namespace SetThings
             public Updater(SettingsManager<TSettings> owner)
             {
                 _owner = owner;
-
                 _pendingUpdates = new Dictionary<string, string>();
             }
 
@@ -91,7 +71,6 @@ namespace SetThings
                 {
                     throw new ArgumentException(invalidSettingMessage);
                 }
-
 
                 var key = setting.GetSettingKey();
                 var converter = TypeDescriptor.GetConverter(typeof (TProp));
@@ -117,7 +96,6 @@ namespace SetThings
                     throw new ArgumentException("setting expression must be a property access");
                 }
 
-
                 var key = setting.GetSettingKey();
                 var val = prop.GetDefaultValue();
                 _pendingUpdates.Add(key, val);
@@ -125,10 +103,8 @@ namespace SetThings
             }
 
 
-            public virtual void Commit()
-            {
+            public virtual void Commit() => 
                 _owner.WriteSettings(_pendingUpdates, merge: true);
-            }
         }
     }
 }

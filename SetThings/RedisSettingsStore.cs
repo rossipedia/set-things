@@ -28,11 +28,10 @@ namespace SetThings
         }
 
 
-        public Dictionary<string, string> ReadSettings()
-        {
-            var db = _redis.GetDatabase(_databaseNum);
-            return db.HashScan(_hashName).ToDictionary(e => (string) e.Name, e => (string) e.Value);
-        }
+        public Dictionary<string, string> ReadSettings() =>
+            _redis.GetDatabase(_databaseNum)
+                  .HashScan(_hashName)
+                  .ToDictionary(e => (string) e.Name, e => (string) e.Value);
 
 
         public Task<Dictionary<string, string>> ReadSettingsAsync()
